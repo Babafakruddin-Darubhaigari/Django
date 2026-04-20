@@ -1,13 +1,20 @@
-from django.http import HttpResponse
 from django.shortcuts import render
-
-# Create your views here.
 
 def home(request):
     return render(request, 'home.html', {'name': 'Baba'})
 
+
 def add(request):
-    a = int(request.GET['num1'])
-    b = int(request.GET['num2'])
-    result = a + b
+    num1 = request.GET.get('num1')
+    num2 = request.GET.get('num2')
+
+    try:
+        result = int(num1) + int(num2)
+    except (TypeError, ValueError):
+        return render(
+            request,
+            'result.html',
+            {'result': 'Please enter valid whole numbers.'},
+        )
+
     return render(request, 'result.html', {'result': result})
